@@ -1,27 +1,21 @@
 package com.baagir.shopping.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.NotNull;
+
+@Document(collection = "user")
 public class User {
+    @NotNull(message = "last name must not be blank!")
     private String lastName;
+    @NotNull(message = "first name must not be blank!")
     private String firstName;
+    @NotNull(message = "user name must not be blank!")
     private String userName;
+    @NotNull(message = "password must not be blank!")
     private String password;
+    @NotNull(message = "email address must not be blank!")
     private String emailAddress;
-
-    public User(String lastName, String firstName, String userName, String password, String emailAddress) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.userName = userName;
-        this.password = password;
-        this.emailAddress = emailAddress;
-    }
-
-    public User() {
-        this.lastName = "lastName";
-        this.firstName = "firstName";
-        this.userName = "userName";
-        this.password = "password";
-        this.emailAddress = "emailAddress";
-    }
 
     public String getLastName() {
         return lastName;
@@ -61,5 +55,16 @@ public class User {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                '}';
     }
 }
