@@ -6,10 +6,7 @@ import com.baagir.shopping.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -28,5 +25,14 @@ public class UserController {
         }
         user = service.save(user);
         return ResponseEntity.ok(user);
+    }
+
+    @PutMapping(path = "/users/{emailAddress}")
+    @ResponseBody
+    public ResponseEntity updatePassword(@PathVariable String emailAddress, @RequestBody @Valid User user, Errors errors) {
+        if (!emailAddress.equalsIgnoreCase(user.getEmailAddress()))
+            return ResponseEntity.badRequest().build();
+        service.updatePassword(user);
+        return ResponseEntity.noContent().build();
     }
 }

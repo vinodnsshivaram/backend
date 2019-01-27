@@ -1,20 +1,27 @@
 package com.baagir.shopping.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @Document(collection = "user")
 public class User {
+    @Id
+    private UUID id = UUID.randomUUID();
     @NotNull(message = "last name must not be blank!")
     private String lastName;
     @NotNull(message = "first name must not be blank!")
     private String firstName;
     @NotNull(message = "user name must not be blank!")
+    @Indexed(unique = true)
     private String userName;
     @NotNull(message = "password must not be blank!")
     private String password;
     @NotNull(message = "email address must not be blank!")
+    @Indexed(unique = true)
     private String emailAddress;
 
     public String getLastName() {

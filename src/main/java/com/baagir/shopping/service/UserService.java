@@ -11,6 +11,13 @@ public class UserService {
     private UserRepository repository;
 
     public User save(User user) {
-        return repository.save(user);
+        user = repository.save(user);
+        return user;
+    }
+
+    public void updatePassword(User user) {
+        User fromDB = repository.findByEmailAddress(user.getEmailAddress());
+        fromDB.setPassword(user.getPassword());
+        repository.save(fromDB);
     }
 }
