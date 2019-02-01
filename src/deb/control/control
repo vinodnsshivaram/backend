@@ -1,0 +1,7 @@
+Package: backedn
+Version: [[version]]
+Section: misc
+Priority: low
+Architecture: all
+Description: [[description]]
+Maintainer: vinodsamanthgnt@gmail.com
