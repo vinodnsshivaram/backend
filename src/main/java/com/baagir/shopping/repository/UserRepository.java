@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface UserRepository extends MongoRepository<User, UUID> {
     public User findByEmailAddress(String emailAddress);
     public User findByUserName(String userName);
+    public User findByUserNameAndEmailAddress(String userName, String emailAddress);
 }

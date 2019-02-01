@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.text.ParseException;
+import java.util.Objects;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
@@ -27,7 +28,7 @@ public class UserController extends AbstractController {
     @Autowired
     private UserService service;
 
-    @PostMapping(path = "/users/signup}")
+    @PostMapping(path = "/signup")
     public HttpEntity<User> signup(@RequestBody @Valid User user, HttpServletResponse response) throws ParseException {
         user.cleanup();
         User savedUser = service.signUp(user);
@@ -42,7 +43,7 @@ public class UserController extends AbstractController {
         return new ResponseEntity(resource, HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/users/login}")
+    @PostMapping(path = "/login")
     public HttpEntity<User> login(@RequestBody User user, HttpServletResponse response) throws ParseException {
         return ResponseEntity.noContent().build();
     }
@@ -62,9 +63,9 @@ public class UserController extends AbstractController {
         return new ResponseEntity(resource, HttpStatus.OK);
     }
 
-    @PutMapping(path = "/users/{userName}")
+    @PutMapping(path = "/{userName}")
     public HttpEntity<User> updatePassword(@PathVariable String userName, @RequestBody User user, HttpServletResponse response) {
-        if (!userName.equalsIgnoreCase(user.getEmailAddress()))
+        if (!Objects.equals(userName, user.getUserName()))
             return ResponseEntity.badRequest().build();
 
         service.updatePassword(user);

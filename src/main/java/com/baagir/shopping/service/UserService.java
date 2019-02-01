@@ -24,30 +24,30 @@ public class UserService {
 
         User fromDB = findByUserName(user.getUserName());
         if (fromDB != null)
-            throw new DuplicateItemException("userName : " + user.getUserName() + " or emailAddress : " + user.getEmailAddress() + " or both are used.");
+            throw new DuplicateItemException("userName : " + user.getUserName() + " is already taken, please choose a different userName");
 
         user.setId(UUID.randomUUID().toString());
         User savedUser = repository.save(user);
         return savedUser;
     }
 
+    private User findByUserNameAndEmailAddress(String userName, String emailAddress) {
+        return repository.findByUserNameAndEmailAddress(userName, emailAddress);
+    }
+
     public void updatePassword(User user) {
         User fromDB = findByUserName(user.getUserName());
+        if (fromDB == null)
+            throw new ItemNotFoundException("No user with " + user.getUserName() + " user name was found");
         fromDB.setPassword(user.getPassword());
         repository.save(fromDB);
     }
 
     public User findByEmailAddress(String emailAddress) {
-        User fromDB = repository.findByEmailAddress(emailAddress);
-        if (fromDB == null)
-            throw new ItemNotFoundException("User with email address : " + emailAddress + " was not found");
-        return fromDB;
+        return repository.findByEmailAddress(emailAddress);
     }
 
     public User findByUserName(String userName) {
-        User fromDB = repository.findByUserName(userName);
-        if (fromDB == null)
-            throw new ItemNotFoundException("User with userName : " + userName + " was not found");
-        return fromDB;
+        return repository.findByUserName(userName);
     }
 }
