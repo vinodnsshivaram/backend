@@ -1,6 +1,6 @@
 package com.baagir.shopping.repository;
 
-import com.baagir.shopping.model.User;
+import com.baagir.shopping.domain.resources.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
