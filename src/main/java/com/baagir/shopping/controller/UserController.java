@@ -11,7 +11,6 @@ import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,13 +26,10 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class UserController extends AbstractController {
     @Autowired
     private UserService service;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping(path = "/users/signup}")
     public HttpEntity<User> signup(@RequestBody @Valid User user, HttpServletResponse response) throws ParseException {
         user.cleanup();
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         User savedUser = service.signUp(user);
 
         log.debug("ShoppingApplication : User POST : Response Headers : [ HAL : "+response.getHeader("Location")
@@ -71,7 +67,6 @@ public class UserController extends AbstractController {
         if (!userName.equalsIgnoreCase(user.getEmailAddress()))
             return ResponseEntity.badRequest().build();
 
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         service.updatePassword(user);
 
         log.debug("ShoppingApplication : User updatePassword PUT : Response Headers : [ HAL : " + response.getHeader("Location")

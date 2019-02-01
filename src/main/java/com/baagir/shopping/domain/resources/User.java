@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -36,7 +35,6 @@ public class User extends AbstractLinkableEntity {
 
     @ApiModelProperty(value="userName", dataType = "string",notes = "userName of the user.", required = true)
     @Size(min = 1)
-    @Column(unique = true)
     @NotBlank(message = "userName can't be empty!")
     private String userName;
 
