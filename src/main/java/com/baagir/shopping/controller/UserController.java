@@ -2,6 +2,7 @@ package com.baagir.shopping.controller;
 
 import com.baagir.shopping.domain.AbstractLinkableEntity;
 import com.baagir.shopping.domain.resources.User;
+import com.baagir.shopping.exception.ItemNotFoundException;
 import com.baagir.shopping.service.UserService;
 import com.baagir.shopping.web.RequestThreadLocal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,22 +49,23 @@ public class UserController extends AbstractController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/{emailAddress}")
-    public HttpEntity<User> readByEmail(@PathVariable String emailAddress, HttpServletResponse response) throws ParseException {
-        User fromDB = service.findByEmailAddress(emailAddress);
+    @GetMapping(path = "/username/{userName}")
+    public HttpEntity<User> readByUserName(@PathVariable String userName, HttpServletResponse response) throws ParseException {
+        User fromDB = service.findByUserName(userName);
 
+        if (fromDB == null)
+            throw new ItemNotFoundException("No user with " + userName + " as userName was found");
 
         log.debug("ShoppingApplication : User readByEmail GET : Response Headers : [ HAL : " + response.getHeader("Location")
                 + ", Correlation-Id : " + RequestThreadLocal.getCorrelationId()
                 + " ] Response Body : " +fromDB.toString());
-
 
         Resource<AbstractLinkableEntity> resource = new Resource<>(fromDB);
         resource.add(getUsersSelfLink(fromDB.getId()));
         return new ResponseEntity(resource, HttpStatus.OK);
     }
 
-    @PutMapping(path = "/{userName}")
+    @PutMapping(path = "/username/{userName}")
     public HttpEntity<User> updatePassword(@PathVariable String userName, @RequestBody User user, HttpServletResponse response) {
         if (!Objects.equals(userName, user.getUserName()))
             return ResponseEntity.badRequest().build();
