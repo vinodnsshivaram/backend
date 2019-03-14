@@ -19,10 +19,6 @@ import java.util.Map;
 public class KafkaConfig {
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
-    @Value(value = "${kafka.username}")
-    private String username;
-    @Value(value = "${kafka.password}")
-    private String password;
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -33,8 +29,6 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
-        String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
-        String jaasCfg = String.format(jaasTemplate, username, password);
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -45,9 +39,6 @@ public class KafkaConfig {
         configProps.put(
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
-        configProps.put("security.protocol", "SASL_SSL");
-        configProps.put("sasl.mechanism", "SCRAM-SHA-256");
-        configProps.put("sasl.jaas.config", jaasCfg);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
